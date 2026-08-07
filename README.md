@@ -1,29 +1,35 @@
-# Image Vision MCP
+# Claude Code External Vision MCP
 
-为 Claude Code 部署多模态图片识别能力。通过 MCP 协议接入第三方视觉模型，让非多模态后端也能看图。
+> 在 Claude Code 中调用外部多模态视觉模型，让非多模态后端（如 DeepSeek）也能看图。
+> Call external multimodal vision models from within Claude Code, giving non-multimodal backends (like DeepSeek) the ability to see.
 
-## 功能
+---
 
-- OCR 文字提取
-- 图表解读
-- 场景描述
-- UI 截图分析
-- 文档扫描件识别
+## Features / 功能
 
-## 支持的模型
+- OCR text extraction / 文字提取
+- Chart & diagram interpretation / 图表解读
+- Scene description / 场景描述
+- UI screenshot analysis / UI 截图分析
+- Scanned document recognition / 文档扫描件识别
 
-| 模型 | BASE_URL | MODEL |
-|------|----------|-------|
+## Supported Models / 支持的模型
+
+| Model | BASE_URL | MODEL |
+|-------|----------|-------|
 | Qwen3.8-Max | `dashscope.aliyuncs.com/compatible-mode/v1` | `qwen3.8-max` |
 | GPT-4o | `api.openai.com/v1` | `gpt-4o` |
 | GPT-4o-mini | `api.openai.com/v1` | `gpt-4o-mini` |
 | Gemini 2.0 Flash | `generativelanguage.googleapis.com/v1beta/openai` | `gemini-2.0-flash` |
-| 本地 Ollama | `localhost:11434/v1` | `llava:13b` |
+| Local Ollama / 本地 | `localhost:11434/v1` | `llava:13b` |
+| Any OpenAI-compatible API | any | any |
 
-## 快速开始
+> Model-agnostic — any API that accepts `image_url` in Chat Completions works.
 
-1. 修改 `scripts/vision-mcp.py` 中配置区的 `API_KEY`
-2. 在 Claude Code 项目根目录创建 `.mcp.json`：
+## Quick Start / 快速开始
+
+1. Edit `API_KEY` in `scripts/vision-mcp.py`
+2. Register in Claude Code `.mcp.json`:
 
 ```json
 {
@@ -37,21 +43,25 @@
 }
 ```
 
-3. 在 `~/.claude/settings.json` 中添加 API 域名到 sandbox 白名单
-4. 重启 Claude Code
+3. Add the API domain to `~/.claude/settings.json` sandbox allowlist
+4. Restart Claude Code
 
-## 使用
+## Usage / 使用
 
 ```
+What's in /path/to/image.jpg
 识别 /path/to/image.jpg 里有什么
-提取这张图片的所有文字
+Extract all text from this image
 这张图表展示了什么趋势
+Describe this UI layout
 ```
 
-## 原理
+## How It Works / 原理
 
-纯 Python 标准库实现，零外部依赖。图片 base64 编码后通过 OpenAI 兼容的 `chat/completions` 接口发送给视觉模型。
+Pure Python stdlib, zero external dependencies. The image is base64-encoded and sent via OpenAI-compatible `chat/completions` API to the vision model. Claude Code communicates with the MCP server via JSON-RPC over stdio.
 
-## 许可
+纯 Python 标准库实现，零外部依赖。图片 base64 编码后通过 OpenAI 兼容接口发送给视觉模型。
+
+## License / 许可
 
 MIT
